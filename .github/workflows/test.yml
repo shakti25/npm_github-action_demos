@@ -19,6 +19,8 @@ jobs:
         -   name: Rechek node_modules
             run: ls
         -   name: Output GitHub context
-            run: echo "${{ toJson(github) }}"
+            run: |
+                echo "hey greetins from ${{ github.actor }}!"
+                echo "${{ toJson(github) }}"
         -   name: Run Test
             run: npm test

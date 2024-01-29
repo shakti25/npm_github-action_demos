@@ -8,5 +8,5 @@ jobs:
         uses: actions/checkout@v4
       - name: List code
         run: |
-            echo node -v
+            node -v
             ls

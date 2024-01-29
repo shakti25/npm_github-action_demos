@@ -7,4 +7,6 @@ jobs:
       - name: Get Code
         uses: actions/checkout@v4
       - name: List code
-        run: ls
+        run: |
+            echo node -v
+            ls

@@ -44,8 +44,12 @@ jobs:
                 path: |
                     coverage/**/*
 
+            - name: Fail on Failed Tests
+              if: ${{ steps.test.outcome == 'failure' }}
+              run: exit 1
+
             - name: Upload Artifacts
-              if: success() && ${{ steps.build.outputs.build-rest == 'success' }} && ${{ steps.test.outcome == 'success' }}
+              if: success()
               uses: actions/upload-artifact@v4
               with:
                 name: ${{ env.package-name }}

@@ -30,5 +30,6 @@ jobs:
                 path: |
                     **.html
                     src/**/*
+                    !src/**/**.test.js
                     !node_modules
                     !.github

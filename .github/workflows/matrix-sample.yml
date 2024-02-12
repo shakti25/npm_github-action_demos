@@ -7,6 +7,7 @@ on:
                 required: true
 jobs:
     build:
+        continue-on-error: true  # should be added to avoid rest of jobs being cancelled
         strategy:
             matrix:
                 node-version: [12, 14, 16]

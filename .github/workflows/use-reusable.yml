@@ -30,13 +30,14 @@ jobs:
               run: npm test
 
             - name: Create Jest coverage
+              continue-on-error: true
               if: ${{ steps.test.outcome == 'failure' }}
               id: report
               run: |
                    npm run test-coverage
 
             - name: Upload Jest Report
-              if: ${{ steps.report.outcome == 'success' }}
+              if: ${{ steps.report.conclusion == 'success' }}
               uses: actions/upload-artifact@v4
               with:
                 name: jest-report

@@ -21,6 +21,9 @@ jobs:
             - name: Rechek node_modules
               run: ls
 
+            - name: Show trigger reason
+              run: echo reason to trigger=${{ inputs.reason }}
+
             - name: Build
               run: |
                    echo building the code...

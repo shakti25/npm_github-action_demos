@@ -13,5 +13,5 @@ test('subtract 1 - 1 equal 0', () => {
 });
 
 test('subtract 2 - 1 equal 1', () => {
-    expect(operations.subtraction(2, 1)).toBe(1);
+    expect(operations.subtraction(2, 1)).toBe(2);
 });

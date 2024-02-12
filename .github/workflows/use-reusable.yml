@@ -61,6 +61,7 @@ jobs:
                     !.github
                     !coverage/**/*
     report:
+        needs: build-test
         if: failure()
         runs-on: ubuntu-latest
         steps:

@@ -1,9 +1,54 @@
-name: Reusable CI
+# Testing:
+# - reusable workflows(inputs, secrets, outputs)
+# - environments
+# - approvals
+
+name: Reusable Deployment
 on:
     workflow_call:
+        inputs:
+            artifact-name:
+                description: this is name of the uploaded artifact
+                type: string
+                required: true
+                default: deployment
+            host-name:
+                description: name of the host
+                type: string
+                required: false
+                default: IIS
+        outputs:
+            result:
+                description: this the result of the job
+                value: ${{ jobs.deploy.outputs.job-result }}
+        secrets:
+            fake-credentials:
+                description: this represents fake credentials to connect to the host.
+                required: true
 jobs:
-    build:
+    deploy:
         runs-on: ubuntu-latest
+        outputs:
+            job-result: ${{ steps.set-result.outputs.step-result }}
         steps:
-            - name: Get Code
-              uses: actions/checkout@v4
+            - name: Download Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: ${{ inputs.artifact-name }}
+
+            - name: List downloaded artifacts
+              run: |
+                   ls
+
+            - name: Fake Log In with Credentials
+              run: |
+                   echo logging to host ${{ inputs.host-name}} with credentials ${{ secrets.fake-credentials }}
+
+            - name: Deploy Changes
+              run: |
+                   echo deploying changes to ${{ inputs.host-name }}
+
+            - name: Set Result
+              id: set-result
+              run: |
+                   echo "step-result=success" >> "$GITHUB_OUTPUT"

@@ -6,6 +6,8 @@ jobs:
         runs-on: ubuntu-latest
         env:
           package-name: deployment-package
+        outputs:
+          build-result: ${{ steps.build.outputs.build-res }}
         steps:
             - name: Get Code
               uses: actions/checkout@v4
@@ -17,13 +19,32 @@ jobs:
               run: ls
 
             - name: Build
+              id: build
               run: |
                    echo building the code...
+                   echo "build-res=success" >> "$GITHUB_OUTPUT"
 
             - name: Run Test
+              continue-on-error: true
+              id: test
               run: npm test
 
+            - name: Create Jest coverage
+              if: ${{ steps.test.outcome == 'failure' }}
+              id: report
+              run: |
+                   npm run test-coverage
+
+            - name: Upload Jest Report
+              if: ${{ steps.report.outcome == 'success' }}
+              uses: actions/upload-artifact@v4
+              with:
+                name: jest-report
+                path: |
+                    coverage/**/*
+
             - name: Upload Artifacts
+              if: success() && ${{ steps.build.outputs.build-rest == 'success' }} && ${{ steps.test.outcome == 'success' }}
               uses: actions/upload-artifact@v4
               with:
                 name: ${{ env.package-name }}
@@ -33,3 +54,12 @@ jobs:
                     !src/**/**.test.js
                     !node_modules
                     !.github
+                    !coverage/**/*
+    report:
+        if: failure()
+        runs-on: ubuntu-latest
+        steps:
+          - name: Output Information
+            run: |
+                echo "Something went wrong"
+                echo "${{ toJson(github) }}"

@@ -1,0 +1,9 @@
+name: Reusable CI
+on:
+    workflow_call:
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get Code
+              uses: actions/checkout@v4

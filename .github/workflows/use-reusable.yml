@@ -44,7 +44,7 @@ jobs:
                 path: |
                     coverage/**/*
 
-            - name: Fail on Failed Tests
+            - name: Exit on Failed Tests
               if: ${{ steps.test.outcome == 'failure' }}
               run: exit 1
 

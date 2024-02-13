@@ -6,6 +6,7 @@ env:
 jobs:
     build-test:
         runs-on: ubuntu-latest
+        environment: QA
         env:
             package-name: deployment-package
         outputs:

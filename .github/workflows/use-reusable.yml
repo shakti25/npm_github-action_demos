@@ -1,13 +1,15 @@
 name: Use Reusable workflow
 on:
     workflow_dispatch:
+env:
+    ENV_VARIABLE: ${{ env.ENV_VARIABLE }}
 jobs:
     build-test:
         runs-on: ubuntu-latest
         env:
-          package-name: deployment-package
+            package-name: deployment-package
         outputs:
-          build-result: ${{ steps.build.outputs.build-res }}
+            build-result: ${{ steps.build.outputs.build-res }}
         steps:
             - name: Get Code
               uses: actions/checkout@v4
@@ -16,8 +18,8 @@ jobs:
               id: cache
               uses: actions/cache@v4
               with:
-                path: node_modules
-                key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+                  path: node_modules
+                  key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
 
             - name: Install Dependencies
               if: steps.cache.outputs.cache-hit != 'true'
@@ -29,8 +31,8 @@ jobs:
             - name: Build
               id: build
               run: |
-                   echo building the code...
-                   echo "build-res=success" >> "$GITHUB_OUTPUT"
+                  echo building the code...
+                  echo "build-res=success" >> "$GITHUB_OUTPUT"
 
             - name: Run Test
               continue-on-error: true
@@ -42,15 +44,15 @@ jobs:
               if: ${{ steps.test.outcome == 'failure' }}
               id: report
               run: |
-                   npm run test-coverage
+                  npm run test-coverage
 
             - name: Upload Jest Report
               if: ${{ steps.report.conclusion == 'success' }}
               uses: actions/upload-artifact@v4
               with:
-                name: jest-report
-                path: |
-                    coverage/**/*
+                  name: jest-report
+                  path: |
+                      coverage/**/*
 
             - name: Exit on Failed Tests
               if: ${{ steps.test.outcome == 'failure' }}
@@ -60,20 +62,24 @@ jobs:
               if: success()
               uses: actions/upload-artifact@v4
               with:
-                name: ${{ env.package-name }}
-                path: |
-                    **.html
-                    src/**/*
-                    !src/**/**.test.js
-                    !node_modules
-                    !.github
-                    !coverage/**/*
+                  name: ${{ env.package-name }}
+                  path: |
+                      **.html
+                      src/**/*
+                      !src/**/**.test.js
+                      !node_modules
+                      !.github
+                      !coverage/**/*
+
+            - name: Show ENV variable value
+              run: |
+                  echo ${{ env.ENV_VARIABLE }}
     report:
         needs: build-test
         if: failure()
         runs-on: ubuntu-latest
         steps:
-          - name: Output Information
-            run: |
-                echo "Something went wrong"
-                echo "${{ toJson(github) }}"
+            - name: Output Information
+              run: |
+                  echo "Something went wrong"
+                  echo "${{ toJson(github) }}"

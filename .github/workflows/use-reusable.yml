@@ -2,7 +2,7 @@ name: Use Reusable workflow
 on:
     workflow_dispatch:
 env:
-    ENV_VARIABLE: ${{ env.ENV_VARIABLE }}
+    ENV_VARIABLE: ${{ vars.ENV_VARIABLE }}
 jobs:
     build-test:
         runs-on: ubuntu-latest

@@ -6,7 +6,6 @@ env:
 jobs:
     build-test:
         runs-on: ubuntu-latest
-        environment: QA
         env:
             package-name: deployment-package
         outputs:
@@ -71,7 +70,10 @@ jobs:
                       !node_modules
                       !.github
                       !coverage/**/*
-
+    show-vars:
+        runs-on: ubuntu-latest
+        environment: QA
+        steps:
             - name: Show ENV variable value
               run: |
                   echo ${{ env.ENV_VARIABLE }}

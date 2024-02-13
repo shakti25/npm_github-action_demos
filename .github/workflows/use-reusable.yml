@@ -86,3 +86,16 @@ jobs:
               run: |
                   echo "Something went wrong"
                   echo "${{ toJson(github) }}"
+    deploy:
+        needs: build-test
+        uses: ./.github/workflows/reusable.yml
+        with:
+            artifact-name: deployment-package
+        secrets:
+            fake-credentials: ${{ secrets.FAKE_CREDENTIALS }}
+    print-deploy-result:
+        needs: deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print deploy output
+              run: echo "${{ needs.deploy.outputs.result }}"

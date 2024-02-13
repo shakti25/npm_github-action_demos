@@ -4,14 +4,17 @@ jobs:
     info:
         runs-on: ubuntu-latest
         steps:
-            - name: check github
+            - name: check GitHub context
               run: echo ${{ toJson(github) }}
+
             - name: check github.event_name
               run: echo ${{ github.event_name }}
-            - name: check github.event_name
+
+            - name: check github.event.ref
               run: echo ${{ github.event.ref }}
 
     Build:
+        needs: info
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4

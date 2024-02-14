@@ -2,9 +2,9 @@ name: Approval Workflow
 on:
     workflow_dispatch:
     push:
-        branches: [develop, main]
-    pull_request:
-        branches: [develop, main]
+        branches:
+            - develop
+            - main
 jobs:
     info:
         runs-on: ubuntu-latest

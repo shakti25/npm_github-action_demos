@@ -1,5 +1,10 @@
 name: Approval Workflow
-on: workflow_dispatch
+on:
+    workflow_dispatch:
+    push:
+        branches: [develop, main]
+    pull_request:
+        branches: [develop, main]
 jobs:
     info:
         runs-on: ubuntu-latest
